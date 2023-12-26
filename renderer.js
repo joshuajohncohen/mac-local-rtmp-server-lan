@@ -44,7 +44,7 @@ function fetchStreamInfo(port = 8000) {
       );
       streamsContainer.innerHTML = streamsTemplate(
         Object.assign({}, res, {
-          rtmpUri: 'rtmp://${localLanIp}/live',
+          rtmpUri: `rtmp://${localLanIp}/live`,
           randomStreamKey,
           tools: {
             filesize
