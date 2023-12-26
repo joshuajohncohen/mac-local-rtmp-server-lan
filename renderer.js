@@ -14,13 +14,28 @@ const streamsTemplate = template(
 );
 const streamsContainer = document.getElementById('streams');
 
+/* ************************** *
+ * To anyone reading this and *
+ * trying to run on Windows   *
+ * or Linux, the IP finding   *
+ * code must be changed       *
+ * because it assumes that    *
+ * the Wi-Fi interface is     *
+ * "en0" which is only true   *
+ * for Macs                   *
+ * ************************** */
+
+// IP FINDING CODE:
+const localLanIp = require("os").networkInterfaces()['en0'].filter(({ family }) => family === "IPv4")[0].address;
+// END IP FINDING CODE
+
 function fetchStreamInfo(port = 8000) {
   fetch(`http://localhost:${port}/api/streams`)
     .then(res => res.json())
     .then(res => {
       console.log(
         Object.assign({}, res, {
-          rtmpUri: 'rtmp://127.0.0.1/live',
+          rtmpUri: `rtmp://${localLanIp}/live`,
           randomStreamKey,
           tools: {
             filesize
@@ -29,7 +44,7 @@ function fetchStreamInfo(port = 8000) {
       );
       streamsContainer.innerHTML = streamsTemplate(
         Object.assign({}, res, {
-          rtmpUri: 'rtmp://127.0.0.1/live',
+          rtmpUri: 'rtmp://${localLanIp}/live',
           randomStreamKey,
           tools: {
             filesize
